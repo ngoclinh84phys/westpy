@@ -183,8 +183,13 @@ class BSEResult(object):
 
         print(f"plotting absorption spectrum ({self.wbse_calc.capitalize()})")
 
-        if fname.endswith("data"):
+        if fname.endswith(".dat"):
             with open(fname, 'w') as f:
+                f.write(f"chi_{ipol}\n")
+                if ipol == "XYZ":
+                    f.write("$\omega$ (eV)"+  "abs. coeff. (a.u.)")
+                else:
+                    f.write("$\omega$ (eV)"+  "Im[$\chi$] (a.u.)")
                 for energy, chi in zip(energyAxis, chiAxis.imag):
                     f.write(f"{energy}\t{chi}\n")
             print(f"Data written to {fname}")
