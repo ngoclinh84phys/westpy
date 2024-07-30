@@ -185,11 +185,11 @@ class BSEResult(object):
 
         if fname.endswith(".dat"):
             with open(fname, 'w') as f:
-                f.write(f"chi_{ipol}\n")
+                f.write(f"#Data of chi_{ipol}\n")
                 if ipol == "XYZ":
-                    f.write("$\omega$ (eV)"+  "abs. coeff. (a.u.)")
+                    f.write("#$\omega$ (eV)\t" +  "abs. coeff. (a.u.)\n")
                 else:
-                    f.write("$\omega$ (eV)"+  "Im[$\chi$] (a.u.)")
+                    f.write("#$\omega$ (eV)\t" +  "Im[$\chi$] (a.u.)\n")
                 for energy, chi in zip(energyAxis, chiAxis.imag):
                     f.write(f"{energy}\t{chi}\n")
             print(f"Data written to {fname}")
