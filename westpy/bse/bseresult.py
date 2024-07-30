@@ -183,25 +183,31 @@ class BSEResult(object):
 
         print(f"plotting absorption spectrum ({self.wbse_calc.capitalize()})")
 
-        if not fname:
-            fname = f"chi_{ipol}.png"
+        if fname.endswith("data"):
+            with open(fname, 'w') as f:
+                for energy, chi in zip(energyAxis, chiAxis.imag):
+                    f.write(f"{energy}\t{chi}\n")
+            print(f"Data written to {fname}")
 
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1)
-        dosPlot = ax.plot(energyAxis, chiAxis.imag, label=f"chi_{ipol}")
-
-        plt.xlim([xmin, xmax])
-        plt.xlabel("$\omega$ (eV)")
-        if ipol == "XYZ":
-            plt.ylabel("abs. coeff. (a.u.)")
         else:
-            plt.ylabel("Im[$\chi$] (a.u.)")
-            plt.legend()
-        plt.savefig(fname, dpi=300)
-        print("output written in : ", fname)
-        print("waiting for user to close image preview...")
-        plt.show()
-        fig.clear()
+            if not fname:
+                fname = f"chi_{ipol}.png"
+            fig = plt.figure()
+            ax = fig.add_subplot(1, 1, 1)
+            dosPlot = ax.plot(energyAxis, chiAxis.imag, label=f"chi_{ipol}")
+    
+            plt.xlim([xmin, xmax])
+            plt.xlabel("$\omega$ (eV)")
+            if ipol == "XYZ":
+                plt.ylabel("abs. coeff. (a.u.)")
+            else:
+                plt.ylabel("Im[$\chi$] (a.u.)")
+                plt.legend()
+            plt.savefig(fname, dpi=300)
+            print("output written in : ", fname)
+            print("waiting for user to close image preview...")
+            plt.show()
+            fig.clear()
 
     def __read_beta_zeta(self, ispin: int):
         self.norm = np.zeros(self.n_ipol, dtype=np.float64)
